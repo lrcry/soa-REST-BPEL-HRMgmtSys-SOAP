@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://soap.ors.com.au/crv" xmlns:ns="http://soap.ors.com.au/crv" xmlns:tns="http://soap.ors.com.au/crv">
+    <wsdl:documentation>Web service interface for COMP9322 assignment 2 (BPEL part) </wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://soap.ors.com.au/crv" xmlns:tns="http://soap.ors.com.au/crv">
+            <xs:element name="CRVCheckRequestMsg">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="driverLicenseNumber" nillable="false" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CRVCheckResponseMsg">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" nillable="false" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+           <xs:simpleType name="CRVFaultType">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="InvalidCurrencyCode"/>
+                    <xs:enumeration value="InvalidServiceCode"/>
+                    <xs:enumeration value="ProgramError"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="CRVFault">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="faultType" nillable="false" type="tns:CRVFaultType"></xs:element>
+                        <xs:element name="faultMessage" nillable="false" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="CRVCheckRequestMsg">
+        <wsdl:part name="parameters" element="ns:CRVCheckRequestMsg"/>
+    </wsdl:message>
+    <wsdl:message name="CRVCheckResponseMsg">
+        <wsdl:part name="parameters" element="ns:CRVCheckResponseMsg"/>
+    </wsdl:message>
+    <wsdl:message name="CRVFault">
+        <wsdl:part name="parameters" element="ns:CRVFault"/>
+    </wsdl:message>
+    <wsdl:portType name="CRVPortType">
+        <wsdl:operation name="CRVCheck">
+            <wsdl:input message="ns:CRVCheckRequestMsg" wsaw:Action="urn:CRVCheckRequestMsg"/>
+            <wsdl:output message="ns:CRVCheckResponseMsg" wsaw:Action="urn:CRVCheckResponseMsg"/>
+            <wsdl:fault name="mainFault" message="ns:CRVFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CRVServiceSoap11Binding" type="ns:CRVPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="CRVCheck">
+            <soap:operation soapAction="urn:CRVCheckRequestMsg" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="mainFault">
+                <soap:fault name="mainFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CRVService">
+        <wsdl:port name="CRVServiceHttpSoap11Endpoint" binding="ns:CRVServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/pdv/CRVService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

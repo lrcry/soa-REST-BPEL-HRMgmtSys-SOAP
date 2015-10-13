@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://soap.ors.com.au/pdv" xmlns:ns="http://soap.ors.com.au/pdv" xmlns:tns="http://soap.ors.com.au/pdv">
+    <wsdl:documentation>Web service interface for COMP9322 assignment 2 (BPEL part) </wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://soap.ors.com.au/pdv" xmlns:tns="http://soap.ors.com.au/pdv">
+            <xs:element name="PDVCheckRequestMsg">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="driverLicenseNumber" nillable="false" type="xs:string"/>
+                        <xs:element name="fullName" nillable="false" type="xs:string"/>
+                        <xs:element name="postCode" nillable="false" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="PDVCheckResponseMsg">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="result" nillable="false" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+           <xs:simpleType name="PDVFaultType">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="InvalidCurrencyCode"/>
+                    <xs:enumeration value="InvalidServiceCode"/>
+                    <xs:enumeration value="ProgramError"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="pdvFault">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="faultType" nillable="false" type="tns:PDVFaultType"></xs:element>
+                        <xs:element name="faultMessage" nillable="false" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="PDVCheckRequestMsg">
+        <wsdl:part name="parameters" element="ns:PDVCheckRequestMsg"/>
+    </wsdl:message>
+    <wsdl:message name="PDVCheckResponseMsg">
+        <wsdl:part name="parameters" element="ns:PDVCheckResponseMsg"/>
+    </wsdl:message>
+    <wsdl:message name="pdvFault">
+        <wsdl:part name="parameters" element="ns:pdvFault"/>
+    </wsdl:message>
+    <wsdl:portType name="PDVPortType">
+        <wsdl:operation name="PDVCheck">
+            <wsdl:input message="ns:PDVCheckRequestMsg" wsaw:Action="urn:PDVCheckRequestMsg"/>
+            <wsdl:output message="ns:PDVCheckResponseMsg" wsaw:Action="urn:PDVCheckResponseMsg"/>
+            <wsdl:fault name="mainFault" message="ns:pdvFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PDVServiceSoap11Binding" type="ns:PDVPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="PDVCheck">
+            <soap:operation soapAction="urn:PDVCheckRequestMsg" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="mainFault">
+                <soap:fault name="mainFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="PDVService">
+        <wsdl:port name="PDVServiceHttpSoap11Endpoint" binding="ns:PDVServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/pdv/PDVService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
