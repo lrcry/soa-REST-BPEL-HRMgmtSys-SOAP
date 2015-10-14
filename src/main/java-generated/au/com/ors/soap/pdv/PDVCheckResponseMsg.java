@@ -18,7 +18,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="result" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="pdvResult" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="crvResult" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -29,36 +30,63 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "result"
+    "pdvResult",
+    "crvResult"
 })
 @XmlRootElement(name = "PDVCheckResponseMsg")
 public class PDVCheckResponseMsg {
 
     @XmlElement(required = true)
-    protected String result;
+    protected String pdvResult;
+    @XmlElement(required = true)
+    protected String crvResult;
 
     /**
-     * 获取result属性的值。
+     * 获取pdvResult属性的值。
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getResult() {
-        return result;
+    public String getPdvResult() {
+        return pdvResult;
     }
 
     /**
-     * 设置result属性的值。
+     * 设置pdvResult属性的值。
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setResult(String value) {
-        this.result = value;
+    public void setPdvResult(String value) {
+        this.pdvResult = value;
+    }
+
+    /**
+     * 获取crvResult属性的值。
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCrvResult() {
+        return crvResult;
+    }
+
+    /**
+     * 设置crvResult属性的值。
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCrvResult(String value) {
+        this.crvResult = value;
     }
 
 }

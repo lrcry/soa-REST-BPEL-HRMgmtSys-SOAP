@@ -33,7 +33,7 @@ public class PDVPortTypeImpl implements PDVPortType {
 		String postCode = parameters.getPostCode();
 		try {
 			String result = check(driverLicenseNumber, fullName, postCode);
-			res.setResult(result);
+			res.setPdvResult(result);
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			PdvFault fault = obj.createPdvFault();
